@@ -39,17 +39,18 @@
         tools:layout_editor_absoluteY="356dp">
 
         <EditText
-            android:id="@+id/editTextTextPassword"
+            android:id="@+id/txtBusqueda"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Busqueda por nombre"
             android:ems="10"
-            android:inputType="textPassword" />
+            android:inputType="text" />
 
         <Button
             android:id="@+id/button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="ResultadoHeroes"
             android:text="Buscar Heroes" />
     </LinearLayout>
 
