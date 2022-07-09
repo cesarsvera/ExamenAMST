@@ -29,6 +29,7 @@ public class Heroes extends AppCompatActivity {
     String valor = "";
     JSONArray resp;
     ListView lista;
+    String id = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,10 +77,12 @@ public class Heroes extends AppCompatActivity {
         final TextView cantidad = (TextView) findViewById(R.id.txtCantidad);
         cantidad.setText("Resultado "+resp.length());
         ArrayList<String> nombres = new ArrayList<>();
+
         try {
             for (int i = 0; i < resp.length(); i++) {
                 JSONObject name = new JSONObject(resp.getString(i));
                 nombres.add(name.getString("name"));
+                id = name.getString("id");
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -89,9 +92,11 @@ public class Heroes extends AppCompatActivity {
         lista.setAdapter(adaptador);
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Intent puntaje = new Intent(getBaseContext(), Habilidades.class);
-
+                puntaje.putExtra("nombre", nombres.get(position));
+                puntaje.putExtra("valor", valor);
+                puntaje.putExtra("id", id);
                 startActivity(puntaje);
             }
         });
