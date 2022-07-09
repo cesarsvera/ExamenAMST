@@ -4,6 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -23,11 +28,13 @@ public class Heroes extends AppCompatActivity {
     String token = "7680606351981757";
     String valor = "";
     JSONArray resp;
+    ListView lista;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_heroes);
         mQueue = Volley.newRequestQueue(this);
+        lista = (ListView) findViewById(R.id.listViewId);
         Intent busqueda = getIntent();
         this.valor = (String) busqueda.getExtras().get("busqueda");
         System.out.println("Hay valor aqui");
@@ -42,9 +49,10 @@ public class Heroes extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        System.out.println(response);
+
                         try {
                             resp = response.getJSONArray("results");
+                            System.out.println(resp);
                             PresentacionHeroes(resp);
 
 
@@ -63,10 +71,32 @@ public class Heroes extends AppCompatActivity {
     }
 
     private void PresentacionHeroes(JSONArray resp){
-//        int numero = resp.length();
-//        System.out.println("cantidad :");
         Toast toast = Toast.makeText(this, "Valores "+ resp.length(), Toast.LENGTH_LONG);
         toast.show();
+        final TextView cantidad = (TextView) findViewById(R.id.txtCantidad);
+        cantidad.setText("Resultado "+resp.length());
+        ArrayList<String> nombres = new ArrayList<>();
+        try {
+            for (int i = 0; i < resp.length(); i++) {
+                JSONObject name = new JSONObject(resp.getString(i));
+                nombres.add(name.getString("name"));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        ArrayAdapter adaptador = new ArrayAdapter(this, android.R.layout.simple_list_item_1, nombres);
+        lista.setAdapter(adaptador);
+        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent puntaje = new Intent(getBaseContext(), Habilidades.class);
+
+                startActivity(puntaje);
+            }
+        });
+
+
     }
 
 
